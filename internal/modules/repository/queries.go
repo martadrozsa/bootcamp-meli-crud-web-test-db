@@ -16,4 +16,6 @@ const (
 	SET price=?
 	WHERE id=?
 	`
+
+	sqlDelete = "DELETE FROM product WHERE id=?"
 )

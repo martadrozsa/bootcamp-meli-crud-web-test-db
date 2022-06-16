@@ -89,6 +89,14 @@ func (r *repositoryImpl) UpdatePrice(ctx context.Context, id int64, price float6
 }
 
 func (r *repositoryImpl) Delete(ctx context.Context, id int64) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := r.conn.ExecContext(
+		ctx,
+		sqlDelete,
+		id,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

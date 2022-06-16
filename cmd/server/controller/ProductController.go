@@ -102,13 +102,23 @@ func (c *ProductController) UpdatePrice() gin.HandlerFunc {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 			return
 		}
-		ctx.JSON(http.StatusNoContent, nil)
+		ctx.JSON(http.StatusOK, nil)
 	}
-
 }
 
 func (c *ProductController) Delete() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
-	//TODO implement me
-	panic("implement me")
+	return func(ctx *gin.Context) {
+		id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid id"})
+			return
+		}
+
+		err = c.service.Delete(ctx.Request.Context(), id)
+		if err != nil {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusNoContent, err)
+	}
 }

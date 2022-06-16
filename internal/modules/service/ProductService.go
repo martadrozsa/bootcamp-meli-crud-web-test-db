@@ -42,6 +42,5 @@ func (s *serviceImpl) UpdatePrice(ctx context.Context, id int64, price float64) 
 }
 
 func (s *serviceImpl) Delete(ctx context.Context, id int64) error {
-	//TODO implement me
-	panic("implement me")
+	return s.repository.Delete(ctx, id)
 }
