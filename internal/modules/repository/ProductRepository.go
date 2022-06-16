@@ -1,35 +1,51 @@
 package repository
 
-import "github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/domain"
+import (
+	"context"
+	"database/sql"
+	"github.com/google/uuid"
+	"github.com/jmoiron/sqlx"
+	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/domain/product"
+)
 
-type productRepositoryImpl struct {
+type repositoryImpl struct {
+	conn *sqlx.DB
 }
 
-func CreateRepository() domain.ProductRepository {
-	return &productRepositoryImpl{}
+func CreateProductRepository(conn *sqlx.DB) product.ProductRepository {
+	return &repositoryImpl{conn}
 }
 
-func (p productRepositoryImpl) GetAll() ([]domain.Product, error) {
+func (r *repositoryImpl) GetAll(ctx context.Context) ([]*product.Product, error) {
+	var products []*product.Product
+
+	err := r.conn.SelectContext(
+		ctx,
+		&products,
+		sqlFindAll,
+	)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+	return products, nil
+}
+
+func (r *repositoryImpl) GetById(ctx context.Context, uuid uuid.UUID) (*product.Product, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p productRepositoryImpl) GetById(id int64) (*domain.Product, error) {
+func (r *repositoryImpl) Create(ctx context.Context, uuid uuid.UUID, name string, productType string, description string, quantity int, price float64) (product.Product, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p productRepositoryImpl) Create(id int64, name string, productType string, description string, quantity int, price float64) (domain.Product, error) {
+func (r *repositoryImpl) UpdatePrice(ctx context.Context, uuid uuid.UUID, price float64) (product.Product, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p productRepositoryImpl) UpdatePrice(id int64, price float64) (domain.Product, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (p productRepositoryImpl) Delete(id int64) {
+func (r *repositoryImpl) Delete(ctx context.Context, uuid uuid.UUID) error {
 	//TODO implement me
 	panic("implement me")
 }

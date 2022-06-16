@@ -1,46 +1,43 @@
 package service
 
-import "github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/domain"
+import (
+	"context"
+	"github.com/google/uuid"
+	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/domain/product"
+)
 
-type productServiceImpl struct {
-	productRepository domain.ProductRepository
+type serviceImpl struct {
+	repository product.ProductRepository
 }
 
-func CreateService(r domain.ProductRepository) domain.ProductService {
-	return &productServiceImpl{productRepository: r}
+func CreateProductService(r product.ProductRepository) product.ProductService {
+	return &serviceImpl{repository: r}
 }
 
-func (p *productServiceImpl) GetAll() ([]domain.Product, error) {
-	products, err := p.productRepository.GetAll()
+func (s *serviceImpl) GetAll(ctx context.Context) ([]*product.Product, error) {
+	products, err := s.repository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return products, nil
 }
 
-func (p productServiceImpl) GetById(id int64) (*domain.Product, error) {
-	product, err := p.productRepository.GetById(id)
-	if err != nil {
-		return nil, err
-	}
-	return product, nil
-}
-
-func (p productServiceImpl) Create(id int64, name string, productType string, description string, quantity int, price float64) (domain.Product, error) {
-	newProduct, err := p.productRepository.Create(id, name, productType, description, quantity, price)
-	if err != nil {
-		return domain.Product{}, nil
-	}
-	
-	return newProduct, nil
-}
-
-func (p productServiceImpl) UpdatePrice(id int64, price float64) (domain.Product, error) {
+func (s *serviceImpl) GetById(ctx context.Context, uuid uuid.UUID) (*product.Product, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p productServiceImpl) Delete(id int64) {
+func (s *serviceImpl) Create(ctx context.Context, uuid uuid.UUID, name string, productType string, description string, quantity int, price float64) (product.Product, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *serviceImpl) UpdatePrice(ctx context.Context, uuid uuid.UUID, price float64) (product.Product, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *serviceImpl) Delete(ctx context.Context, uuid uuid.UUID) error {
 	//TODO implement me
 	panic("implement me")
 }
