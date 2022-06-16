@@ -29,9 +29,12 @@ func (s *serviceImpl) GetById(ctx context.Context, id int64) (*product.Product, 
 	return album, nil
 }
 
-func (s *serviceImpl) Create(ctx context.Context, id int64, name string, productType string, description string, quantity int, price float64) (product.Product, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *serviceImpl) Create(ctx context.Context, name string, productType string, description string, quantity int, price float64) (*product.Product, error) {
+	newProduct, err := s.repository.Create(ctx, name, productType, description, quantity, price)
+	if err != nil {
+		return nil, err
+	}
+	return newProduct, nil
 }
 
 func (s *serviceImpl) UpdatePrice(ctx context.Context, id int64, price float64) (product.Product, error) {

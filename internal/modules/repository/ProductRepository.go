@@ -45,9 +45,32 @@ func (r *repositoryImpl) GetById(ctx context.Context, id int64) (*product.Produc
 	return &prod, nil
 }
 
-func (r *repositoryImpl) Create(ctx context.Context, id int64, name string, productType string, description string, quantity int, price float64) (product.Product, error) {
-	//TODO implement me
-	panic("implement me")
+func (r *repositoryImpl) Create(ctx context.Context, name string, productType string, description string, quantity int, price float64) (*product.Product, error) {
+	result, err := r.conn.ExecContext(
+		ctx,
+		sqlCreate,
+		name,
+		productType,
+		description,
+		quantity,
+		price,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	newProductId, err := result.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	return &product.Product{newProductId,
+		name,
+		productType,
+		description,
+		quantity,
+		price}, nil
 }
 
 func (r *repositoryImpl) UpdatePrice(ctx context.Context, id int64, price float64) (product.Product, error) {

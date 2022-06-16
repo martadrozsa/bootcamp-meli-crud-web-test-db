@@ -15,6 +15,14 @@ func CreateProductController(prodService product.ProductService) *ProductControl
 	return &(ProductController{service: prodService})
 }
 
+type requestProductPost struct {
+	Name        string  `json:"name"  binding:"required"`
+	ProductType string  `db:"product_type" json:"product_type" binding:"required"`
+	Description string  `json:"description" binding:"required"`
+	Quantity    int     `json:"quantity" binding:"required"`
+	Price       float64 `json:"price" binding:"required"`
+}
+
 func (c *ProductController) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		products, err := c.service.GetAll(ctx.Request.Context())
@@ -41,13 +49,29 @@ func (c *ProductController) GetById() gin.HandlerFunc {
 
 		ctx.JSON(http.StatusOK, prod)
 	}
-
 }
 
 func (c *ProductController) Create() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
-	//TODO implement me
-	panic("implement me")
+	return func(ctx *gin.Context) {
+
+		// transforma  o body  da requisição de json para o DTO
+		var productDto requestProductPost
+		if err := ctx.ShouldBindJSON(&productDto); err != nil {
+			ctx.JSON(http.StatusUnprocessableEntity,
+				gin.H{
+					"message": "Invalid input. Check the data entered",
+				})
+			return
+		}
+		newProduct, err := c.service.Create(ctx.Request.Context(), productDto.Name, productDto.ProductType, productDto.Description, productDto.Quantity, productDto.Price)
+
+		if err != nil {
+			ctx.JSON(http.StatusConflict, err)
+			return
+		}
+		ctx.JSON(http.StatusCreated, newProduct)
+	}
+
 }
 
 func (c *ProductController) UpdatePrice() gin.HandlerFunc {
