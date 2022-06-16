@@ -23,6 +23,10 @@ type requestProductPost struct {
 	Price       float64 `json:"price" binding:"required"`
 }
 
+type requestProductPatch struct {
+	Price float64 `json:"price" binding:"required"`
+}
+
 func (c *ProductController) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		products, err := c.service.GetAll(ctx.Request.Context())
@@ -54,7 +58,6 @@ func (c *ProductController) GetById() gin.HandlerFunc {
 func (c *ProductController) Create() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
-		// transforma  o body  da requisição de json para o DTO
 		var productDto requestProductPost
 		if err := ctx.ShouldBindJSON(&productDto); err != nil {
 			ctx.JSON(http.StatusUnprocessableEntity,
@@ -71,13 +74,37 @@ func (c *ProductController) Create() gin.HandlerFunc {
 		}
 		ctx.JSON(http.StatusCreated, newProduct)
 	}
-
 }
 
 func (c *ProductController) UpdatePrice() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
-	//TODO implement me
-	panic("implement me")
+	return func(ctx *gin.Context) {
+
+		id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid id"})
+			return
+		}
+
+		var productDto requestProductPatch
+
+		if err := ctx.ShouldBindJSON(&productDto); err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		if productDto.Price <= 0 {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Price must be greater than zero"})
+			return
+		}
+
+		err = c.service.UpdatePrice(ctx.Request.Context(), id, productDto.Price)
+		if err != nil {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusNoContent, nil)
+	}
+
 }
 
 func (c *ProductController) Delete() gin.HandlerFunc {

@@ -37,9 +37,8 @@ func (s *serviceImpl) Create(ctx context.Context, name string, productType strin
 	return newProduct, nil
 }
 
-func (s *serviceImpl) UpdatePrice(ctx context.Context, id int64, price float64) (product.Product, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *serviceImpl) UpdatePrice(ctx context.Context, id int64, price float64) error {
+	return s.repository.UpdatePrice(ctx, id, price)
 }
 
 func (s *serviceImpl) Delete(ctx context.Context, id int64) error {

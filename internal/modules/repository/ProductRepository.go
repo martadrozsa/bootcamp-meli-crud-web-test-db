@@ -65,17 +65,27 @@ func (r *repositoryImpl) Create(ctx context.Context, name string, productType st
 		return nil, err
 	}
 
-	return &product.Product{newProductId,
-		name,
-		productType,
-		description,
-		quantity,
-		price}, nil
+	return &product.Product{
+		Id:          newProductId,
+		Name:        name,
+		ProductType: productType,
+		Description: description,
+		Quantity:    quantity,
+		Price:       price}, nil
 }
 
-func (r *repositoryImpl) UpdatePrice(ctx context.Context, id int64, price float64) (product.Product, error) {
-	//TODO implement me
-	panic("implement me")
+func (r *repositoryImpl) UpdatePrice(ctx context.Context, id int64, price float64) error {
+	_, err := r.conn.ExecContext(
+		ctx,
+		sqlUpdatePrice,
+		price,
+		id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *repositoryImpl) Delete(ctx context.Context, id int64) error {

@@ -26,6 +26,7 @@ func main() {
 	productGroup.GET("/", productController.GetAll())
 	productGroup.GET("/:id", productController.GetById())
 	productGroup.POST("/", productController.Create())
+	productGroup.PATCH("/:id", productController.UpdatePrice())
 
 	router.Run()
 

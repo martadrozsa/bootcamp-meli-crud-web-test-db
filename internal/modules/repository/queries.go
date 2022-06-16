@@ -10,4 +10,10 @@ const (
 	product (name, product_type, description, quantity, price) 
 	VALUES (?, ?, ?, ?, ?)
 	`
+
+	sqlUpdatePrice = `
+	UPDATE product 
+	SET price=?
+	WHERE id=?
+	`
 )
