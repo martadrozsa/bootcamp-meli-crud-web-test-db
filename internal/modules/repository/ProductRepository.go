@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/domain/product"
 )
@@ -22,7 +21,7 @@ func (r *repositoryImpl) GetAll(ctx context.Context) ([]*product.Product, error)
 	err := r.conn.SelectContext(
 		ctx,
 		&products,
-		sqlFindAll,
+		sqlGetAll,
 	)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, err
@@ -30,22 +29,33 @@ func (r *repositoryImpl) GetAll(ctx context.Context) ([]*product.Product, error)
 	return products, nil
 }
 
-func (r *repositoryImpl) GetById(ctx context.Context, uuid uuid.UUID) (*product.Product, error) {
+func (r *repositoryImpl) GetById(ctx context.Context, id int64) (*product.Product, error) {
+	var prod product.Product
+
+	err := r.conn.GetContext(
+		ctx,
+		&prod,
+		sqlGetById,
+		id,
+	)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+
+	return &prod, nil
+}
+
+func (r *repositoryImpl) Create(ctx context.Context, id int64, name string, productType string, description string, quantity int, price float64) (product.Product, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *repositoryImpl) Create(ctx context.Context, uuid uuid.UUID, name string, productType string, description string, quantity int, price float64) (product.Product, error) {
+func (r *repositoryImpl) UpdatePrice(ctx context.Context, id int64, price float64) (product.Product, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *repositoryImpl) UpdatePrice(ctx context.Context, uuid uuid.UUID, price float64) (product.Product, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (r *repositoryImpl) Delete(ctx context.Context, uuid uuid.UUID) error {
+func (r *repositoryImpl) Delete(ctx context.Context, id int64) error {
 	//TODO implement me
 	panic("implement me")
 }

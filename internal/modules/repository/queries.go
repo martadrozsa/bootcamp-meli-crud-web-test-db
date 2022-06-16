@@ -1,5 +1,7 @@
 package repository
 
 const (
-	sqlFindAll = "SELECT  * FROM product"
+	sqlGetAll = "SELECT  * FROM product"
+
+	sqlGetById = "SELECT * FROM product WHERE id=?"
 )
