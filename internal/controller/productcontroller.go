@@ -2,16 +2,16 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/domain/product"
+	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/product/domain"
 	"net/http"
 	"strconv"
 )
 
 type ProductController struct {
-	service product.ProductService
+	service domain.ProductService
 }
 
-func CreateProductController(prodService product.ProductService) *ProductController {
+func CreateProductController(prodService domain.ProductService) *ProductController {
 	return &(ProductController{service: prodService})
 }
 

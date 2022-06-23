@@ -2,18 +2,18 @@ package service
 
 import (
 	"context"
-	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/domain/product"
+	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/product/domain"
 )
 
 type serviceImpl struct {
-	repository product.ProductRepository
+	repository domain.ProductRepository
 }
 
-func CreateProductService(r product.ProductRepository) product.ProductService {
+func CreateProductService(r domain.ProductRepository) domain.ProductService {
 	return &serviceImpl{repository: r}
 }
 
-func (s *serviceImpl) GetAll(ctx context.Context) ([]*product.Product, error) {
+func (s *serviceImpl) GetAll(ctx context.Context) ([]*domain.Product, error) {
 	products, err := s.repository.GetAll(ctx)
 	if err != nil {
 		return nil, err
@@ -21,15 +21,15 @@ func (s *serviceImpl) GetAll(ctx context.Context) ([]*product.Product, error) {
 	return products, nil
 }
 
-func (s *serviceImpl) GetById(ctx context.Context, id int64) (*product.Product, error) {
-	album, err := s.repository.GetById(ctx, id)
+func (s *serviceImpl) GetById(ctx context.Context, id int64) (*domain.Product, error) {
+	product, err := s.repository.GetById(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	return album, nil
+	return product, nil
 }
 
-func (s *serviceImpl) Create(ctx context.Context, name string, productType string, description string, quantity int, price float64) (*product.Product, error) {
+func (s *serviceImpl) Create(ctx context.Context, name string, productType string, description string, quantity int, price float64) (*domain.Product, error) {
 	newProduct, err := s.repository.Create(ctx, name, productType, description, quantity, price)
 	if err != nil {
 		return nil, err
