@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/martadrozsa/bootcamp-meli-crud-web-test/cmd/controller"
 	"github.com/martadrozsa/bootcamp-meli-crud-web-test/config"
-	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/product/controller"
 	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/product/repository"
 	"github.com/martadrozsa/bootcamp-meli-crud-web-test/internal/product/service"
 )
